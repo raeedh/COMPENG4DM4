@@ -2,7 +2,25 @@
 clear all;
 clc;
 
-A = imread("images\dimorphos.png");
+% input image file here
+% max number of pixels is 174762, or 418x418 if image is square
+image_path = "images\dimorphos_original.png";
+A = imread(image_path);
+
+fprintf("Input image is %s\n", image_path);
+fprintf("Image size is %dx%d.\n",size(A,1),size(A,2));
+
+if (size(A,1)*size(A,2) > 174762)
+    prompt = "Image is too large to process, do you wish to resize? Y/n\n";
+    x = input(prompt,"s");
+    if (x == 'Y') || (x == 'y')
+        fprintf("Resizing image to 418x418.\n");
+        A = imresize(A,[418, 418]);
+    else
+        fprintf("Exitting script, please input valid input (less than 174762 pixels, or 418x418).\n");
+        return
+    end
+end
 
 figure(1);
 clf;
