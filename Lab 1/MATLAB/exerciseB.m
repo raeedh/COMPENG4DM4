@@ -2,7 +2,7 @@
 clear all;
 clc;
 
-A = imread('my_image.jpg');
+A = imread("images\dimorphos.png");
 
 figure(1);
 clf;
