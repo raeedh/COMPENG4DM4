@@ -96,8 +96,8 @@ for i = 1:size(bitSequences,1)
 end
 
 % third row of table
-totalZeros = sum(zeroruns_table(2,:));
-totalOnes = sum(oneruns_table(2,:));
+totalZeros = sum(zeroruns_table(1,:) .* zeroruns_table(2,:));
+totalOnes = sum(oneruns_table(1,:) .* oneruns_table(2,:));
 for i = 1:24
    oneruns_table(3,i) = oneruns_table(2,i) / totalOnes;
    zeroruns_table(3,i) = zeroruns_table(2,i) / totalZeros;
