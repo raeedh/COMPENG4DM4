@@ -74,7 +74,7 @@ end
 %% A5, A6
 
 % % https://www.mathworks.com/matlabcentral/answers/459701-counting-consecutive-occurences-of-1s-and-1s
-changeBits = [1,diff(BITS)]~=0;
+changeBits = [1,diff(BITS(1:end-1))]~=0;
 counts = histcounts(cumsum(changeBits),1:sum(changeBits)+1);
 bitSequences = [BITS(changeBits)',counts'];
 
