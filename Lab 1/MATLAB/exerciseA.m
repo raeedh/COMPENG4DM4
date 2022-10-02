@@ -12,7 +12,7 @@ S(1) = 1; % S(1) is LSB
 S_initial = S; % store initial state of S
 
 % Create large output vector to store output stream
-DATA_OUT = zeros(1, 2^22);
+DATA_OUT = zeros(1, 2^22-1);
 
 % Observe LSFR for 5000000 clock ticks
 for time = 1:5000000
