@@ -2,7 +2,7 @@
 clear all;
 clc;
 
-%% A1, A2, A3
+%% A1, A2
 
 % Create state-vector for LFSR with 22 bits
 S = zeros(1,22);
@@ -39,31 +39,42 @@ end
 if exist('period', 'var') == 0
     fprintf(2,'DID NOT FIND PERIOD !!!! \n');
 else
+    % Write bits to file, as their decimal representation per byte
     fprintf('Printing random numbers to file my_random_numbers.m...\n');
-    num_bytes = ceil(period/8);
+    num_bytes = ceil(period / 8);
     
+    % Open file for writing
     fid = fopen('my_random_numbers.m', 'w');
     
+    % Write starting information
     fprintf(fid, 'num_bytes = %d;\n', num_bytes);
     fprintf(fid, 'RANDOM_DATA_OUT(1:num_bytes) = [...\n');
     
+    % Write out only 1 period, and not the entire array
     BITS = DATA_OUT(1:period);
+
+    % Append zeroes to LSB make the bitarray divisible by 8
     BITS = [BITS, zeros(1, 8-mod(period, 8))];
+
+    % Reverse the array so the LSB is at index 1
     BITS = flip(BITS);
     
     byte = 1;
     
-    while byte <= num_bytes   
-        DEC = num2str(BITS(byte*8-7:byte*8));
-        DEC = bin2dec(DEC);
-        fprintf(fid, '%d, ',DEC);
+    % Convert each byte into decimal and write it out to file
+    while byte <= num_bytes
+        DEC = num2str(BITS(byte*8-7:byte*8)); % Get a new byte and convert to string
+        DEC = bin2dec(DEC); % Convert to base 10
+        fprintf(fid, '%d, ', DEC); % Write to file, comma separated
         
+        % Write 16 bytes per line in the file
         if mod(byte,16) == 0
             fprintf(fid, '...\n');
         end
-        byte = byte + 1;
+        byte = byte + 1; % Increment byte counter
     end
     
+    % Close the file
     fprintf(fid, '...\n];');
     fclose(fid);
     fprintf('Finished printing random numbers to file my_random_numbers.m\n');
@@ -72,37 +83,42 @@ end
 %% A5, A6
 
 % https://www.mathworks.com/matlabcentral/answers/459701-counting-consecutive-occurences-of-1s-and-1s
-changeBits = [1,diff(BITS(1:end-1))]~=0;
-counts = histcounts(cumsum(changeBits),1:sum(changeBits)+1);
+changeBits = [1, diff(BITS(1:end-1))] ~= 0;
+counts = histcounts(cumsum(changeBits), 1:sum(changeBits) + 1);
 bitSequences = [BITS(changeBits)',counts'];
 
-zeroruns_table = zeros(4,24); oneruns_table = zeros(4,24);
+zeroruns_table = zeros(4, 24); oneruns_table = zeros(4, 24);
 
 % first row of table
-zeroruns_table(1,1:24) = 1:24;
-oneruns_table(1,1:24) = 1:24;
+zeroruns_table(1, 1:24) = 1:24;
+oneruns_table(1, 1:24) = 1:24;
 
 % second row of table
-for i = 1:size(bitSequences,1)
-    if (bitSequences(i,2) <= 25)
-        if bitSequences(i,1) == 0
-            oneruns_table(2,bitSequences(i,2)) = oneruns_table(2,bitSequences(i,2)) + 1;
+for i = 1:size(bitSequences, 1)
+    if (bitSequences(i, 2) <= 25) % Check in range of table bounds
+        % Increment the run count for the corresponding run length
+        if bitSequences(i, 1) == 0
+            oneruns_table(2, bitSequences(i, 2)) = oneruns_table(2, bitSequences(i, 2)) + 1;
         else
-            zeroruns_table(2,bitSequences(i,2)) = zeroruns_table(2,bitSequences(i,2)) + 1;
+            zeroruns_table(2, bitSequences(i, 2)) = zeroruns_table(2, bitSequences(i, 2)) + 1;
         end
     end
 end
 
 % third row of table
+% Find the total number of zeros and ones from the runs tables
 totalZeros = sum(zeroruns_table(1,:) .* zeroruns_table(2,:));
 totalOnes = sum(oneruns_table(1,:) .* oneruns_table(2,:));
 for i = 1:24
-   oneruns_table(3,i) = oneruns_table(2,i) / sum(oneruns_table(2,:));
-   zeroruns_table(3,i) = zeroruns_table(2,i) / sum(zeroruns_table(2,:));
+   % Calculate the actual probability of each run length occurring
+   oneruns_table(3, i) = oneruns_table(2, i) / sum(oneruns_table(2,:));
+   zeroruns_table(3, i) = zeroruns_table(2, i) / sum(zeroruns_table(2,:));
 end
 
 % fourth row of table
 for i = 1:24
-   oneruns_table(4,i) = 2^-oneruns_table(1,i);
-   zeroruns_table(4,i) = 2^-zeroruns_table(1,i);
+   % Calculate the theoretical probability of each run length occurring
+   % 2^(-k) where k is the run length
+   oneruns_table(4, i) = 2^-oneruns_table(1, i);
+   zeroruns_table(4, i) = 2^-zeroruns_table(1, i);
 end
