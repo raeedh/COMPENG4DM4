@@ -1,7 +1,8 @@
-%% B1
+%% Clear workspace
 clear all;
 clc;
 
+%% B1
 % input image file here
 % max number of pixels is 174762, or 418x418 if image is square
 image_path = "images\dimorphos_original.png";
@@ -22,7 +23,7 @@ if (size(A,1)*size(A,2) > 174762)
     end
 end
 
-figure(1);
+figure('Name', 'Original Image');
 clf;
 image_original = image(A);
 
@@ -42,7 +43,7 @@ for i = 1:numel(A_encrypted)
     A_encrypted(i) = bitxor(A(i), RAND_matrix(i));
 end
 
-figure(2);
+figure('Name', 'Encrypted Image');
 clf;
 image_encrypted = image(A_encrypted);
 
@@ -55,6 +56,6 @@ for i = 1:numel(A_decrypted)
     A_decrypted(i) = bitxor(A_encrypted(i), RAND_matrix(i));
 end
 
-figure(3);
+figure('Name', 'Decrypted Image');
 clf;
 image(A_decrypted)

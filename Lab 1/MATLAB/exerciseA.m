@@ -1,6 +1,8 @@
-%% A1-A4
+%% Clear workspace
 clear all;
 clc;
+
+%% A1, A2, A3
 
 % Create state-vector for LFSR with 22 bits
 S = zeros(1,22);
@@ -10,7 +12,7 @@ S(1) = 1; % S(1) is LSB
 S_initial = S; % store initial state of S
 
 % Create large output vector to store output stream
-DATA_OUT = zeros(1, 2^32);
+DATA_OUT = zeros(1, 2^22);
 
 % Observe LSFR for 5000000 clock ticks
 for time = 1:5000000
@@ -33,6 +35,7 @@ for time = 1:5000000
     end
 end
 
+%% A3, A4
 if exist('period', 'var') == 0
     fprintf(2,'DID NOT FIND PERIOD !!!! \n');
 else
@@ -46,18 +49,13 @@ else
     
     BITS = DATA_OUT(1:period);
     BITS = [BITS, zeros(1, 8-mod(period, 8))];
-    %size(BITS,2)
     BITS = flip(BITS);
     
-    % DECIMALS = zeros(1,num_bytes);
-    
-    % bytes_to_file = 0;
     byte = 1;
     
     while byte <= num_bytes   
         DEC = num2str(BITS(byte*8-7:byte*8));
         DEC = bin2dec(DEC);
-        % DECIMALS(byte) = DEC;
         fprintf(fid, '%d, ',DEC);
         
         if mod(byte,16) == 0
@@ -73,7 +71,7 @@ end
 
 %% A5, A6
 
-% % https://www.mathworks.com/matlabcentral/answers/459701-counting-consecutive-occurences-of-1s-and-1s
+% https://www.mathworks.com/matlabcentral/answers/459701-counting-consecutive-occurences-of-1s-and-1s
 changeBits = [1,diff(BITS(1:end-1))]~=0;
 counts = histcounts(cumsum(changeBits),1:sum(changeBits)+1);
 bitSequences = [BITS(changeBits)',counts'];
@@ -99,6 +97,12 @@ end
 totalZeros = sum(zeroruns_table(1,:) .* zeroruns_table(2,:));
 totalOnes = sum(oneruns_table(1,:) .* oneruns_table(2,:));
 for i = 1:24
-   oneruns_table(3,i) = oneruns_table(2,i) / totalOnes;
-   zeroruns_table(3,i) = zeroruns_table(2,i) / totalZeros;
+   oneruns_table(3,i) = oneruns_table(2,i) / sum(oneruns_table(2,:));
+   zeroruns_table(3,i) = zeroruns_table(2,i) / sum(zeroruns_table(2,:));
+end
+
+% fourth row of table
+for i = 1:24
+   oneruns_table(4,i) = 2^-oneruns_table(1,i);
+   zeroruns_table(4,i) = 2^-zeroruns_table(1,i);
 end
