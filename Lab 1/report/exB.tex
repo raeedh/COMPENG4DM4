@@ -9,7 +9,7 @@
 For this experiment, we used an image of Dimorphos taken from the recent NASA DART mission. The image can be seen in Figure~\ref{fig:B1}. This image was downloaded from the internet, resized to a size of 418x418 using the Image Resizer utility from Microsoft PowerToys. As the LSFR in Exercise A produces 4194303 random bits, or 524288 bytes when we store it in `\texttt{my\_random\_numbers.m}', we can only use pictures that contain 174762 ($524288 / 3$ random numbers for each R, G, B value for each pixel) or less pixels, which is approximately 418x418 if the image is a square. This image was read into MATLAB using the built-in \texttt{imread} function, storing the image and it's bit-map into the 3D matrix \texttt{A}. 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width=0.7\textwidth]{dimorphos.png}
+    \includegraphics[width=0.5\textwidth]{dimorphos.png}
     \caption{\label{fig:B1}Image of Dimorphos from NASA DART spacecraft}
 \end{figure}
 
@@ -33,7 +33,7 @@ We create the uint8 matrix \texttt{A\_encrypted} in MATLAB with the same size an
 As the matrix \texttt{A\_encrypted} is already of the type uint8, we can view the image without conversion by using the \texttt{image} function. The encrypted image can be seen in Figure~\ref{fig:B4}. The image appears to be random noise as expected.
 \begin{figure}[htp]
     \centering
-    \includegraphics[width=0.7\textwidth]{encrpyted_image.png}
+    \includegraphics[width=0.5\textwidth]{encrpyted_image.png}
     \caption{\label{fig:B4}Encrypted Image}
 \end{figure}
 
@@ -47,7 +47,7 @@ Similar to the process described in A3, We create the uint8 matrix \texttt{A\_de
 As the matrix \texttt{A\_decrypted} is already of the type uint8, we can view the image without conversion by using the \texttt{image} function. The encrypted image can be seen in Figure~\ref{fig:B5}. The image appears to match the original image in Figure~\ref{fig:B1} as expected.
 \begin{figure}[htp]
     \centering
-    \includegraphics[width=0.7\textwidth]{decrypted_image.png}
+    \includegraphics[width=0.5\textwidth]{decrypted_image.png}
     \caption{\label{fig:B5}Decrypted Image}
 \end{figure}
 
