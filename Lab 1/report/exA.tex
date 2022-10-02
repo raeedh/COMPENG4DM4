@@ -3,22 +3,51 @@
 \begin{enumerate}[wide, label=(A\arabic*)]
 
 % A1
+% Try to use the LFSR in Fig. 2, to generate many random bits. Write clear and well-documented code. You can record these bits in a long vector called DATA_OUT. Each clock tick adds 1 bit to the DATA_OUT vector. Set the initial-state to (0,0,1) decimal, and run the LFSR. Observe the DATA_OUT bit-stream, for many clock ticks. It should appear to be a random stream of bits.
 \item
+The LSFR is implemented in `\texttt{exerciseA.m}', submitted in the pdf `\texttt{exerciseA.pdf}'. As we expect the period of the output data stream to be $2^n - 1$, we initialized an output vector \texttt{DATA\_OUT} with size $2^{22} - 1$ for our 22-bit LSFR. The LSFR is stored in a vector \texttt{S}. In each clock tick we store the least significant bit or output in variable \texttt{LSB}, shift bits 2--21 into 1--20, use the MATLAB built-in \texttt{xor} function to XOR bit 22 and \texttt{LSB} and shift the result into bit 21, and shift \texttt{LSB} into bit 22. The output or \texttt{LSB} at each clock tick is stored into \texttt{DATA\_OUT}.
 
 % A2
+%  Does the LFSR reach a ‘steady-state’, ie does the output observed on the DATA_OUT bit-stream repeat ? Specifically, can you find the same sequence of 22 bits in DATA_OUT, at two different locations within the bit-stream ? If so, that sequence of 22 bits has repeated. What is the period of the output stream (ie how many clock-ticks expire, before it repeats? Equivalently, how many random bits are generated in one period? )
 \item
+For each clock-tick of the LSFR, we check if the current state of the LSFR is equal to the initial state. If these states are equal, then the LSFR will begin to repeat. The 22-bit LSFR reaches a steady-state after 4194303 clock-ticks, with the initial state of the LSFR appearing again after the 4194303 clock-ticks. This means the period of the LSFR is 4194303, and it can generate a pseudo-random output bit-stream that is 4194303 bits long.
 
 % A3
+% Assuming your LFSR has a period, record the random data generated in one period to the vector DATA_OUT, so you can read the data later. You can write bits to a file, it will be hard to interpret a million bits or more. Therefore, convert the sequence of bits in DATA_OUT into a sequence of bytes, and write out a decimal number for each byte. The number of bytes is given by floor(period/8). You can call this file “my_random_numbers.m’. (It might take 1-2 minutes of computer time to generate these numbers and write them to a file.) Print out the first page of your file, to include in your lab report.
+% (You can write a stream of decimal numbers into a matlab file, with say 16 values per row. Open a file using “fid = fopen(‘my_random_numbers.m’, ‘w’);
+% Write 16 numbers to the file using “fprintf(fid,’%3g, ’, vector); and “fprintf(fid,’...\n’);” where “vector’ has 16 decimal numbers.
 \item
+The code to generate `\texttt{my\_random\_numbers.m}' is implemented in `\texttt{exerciseA.m}', submitted in the pdf `\texttt{exerciseA.pdf}'. The code stores the output bit-stream for one period from \texttt{DATA\_OUT} and stores it into \texttt{BITS}, which we modify and then convert each byte from the bit-stream into a decimal number using MATLAB's built-in \texttt{num2str} and \texttt{bin2dec} functions. These decimal numbers are then written to the file `\texttt{my\_random\_numbers.m}'.
 
 % A4
+% Define a “0-run” as a string of consecutive 0s, which are preceded by a non-0 character, and followed by a non-0 character. (A non-0 character is a 1, or a null character, or an end of file character). Define a “1-run” as a string of consecutive 1s, which are preceded by a non-1 character, and followed by a non-1 character. (A non-0 character is a 1, or a null character, or an end of file character).
+% Let X(k) be the number of observations of 0-runs of length k, in one period (for k=1,2,3,....).
+% Let Y(k) be the number of observations of 1-runs of length k, in one period (for k=1,2,3,....).
+% Consider only 0-runs first. The conditional-probability that a 0-run of length k occurs, given that we are only considering 0-runs, is given by X(k) / (sum of all observed X(k) ). We know that the sum of all these conditional probabilities over all k must = 1, by definition.
+% Consider only 1-runs next. The conditional-probability that a 1-run of length k occurs, given that we are only considering 1-runs, is given by Y(k) / (sum of all observed Y(k) ). We know that the sum of all these conditional probabilities over all k must = 1, by definition.
+% Consider the unconditional-probability that a 0-run or 1-run of length k occurs, given that we are
+% considering both 0-runs and 1-runs. These probabilities are given by :
+% X(k)/(sum of all observed X(k) and sum of all observed Y(k) )
+% Y(k)/(sum of all observed X(k) and sum of all observed Y(k) )
+% Now consider a perfectly-random bit stream. Given us a formula for the conditional-probability that a 0-run of length k occurs, given that we are considering only 0-runs in a perfectly random bit-stream. Try to justify your formula.
+% Give us a formula for the conditional-probability that a 1-run of length k occurs, given that we are considering only 1-runs in a perfectly random bit-stream. Try to justify your formula.
+
 \item
 
 % A5
+% Create a table for 0-runs, with 4 rows, and 24 columns. The first row shows the number k, for k = 1 to 24. The 2nd row shows the number of observations of 0-runs of length k, for k=1...24, in one period of your LFSR (assuming your LFSR has a period). The 3rd row shows the observed experimental conditional-probability that a 0-run of length k occurs, given that we are using only your observations of 0-runs. (If your LFSR does not have a period, run the LFSR for a million click ticks.) The 4th row shows a theoretical answer, the conditional-probability that a 0-run of length k occurs, in a perfectly-random bit stream. (Use your formula from part A4.) When you print these numbers, if the numbers become very small, use a floating point format, ie try fprintf(‘%10.8f, ‘ .... Are there any discrepancies between the theoretical and experimental conditional probabilities ?
+% Try to explain any discrepancy between the experimental and theoretical conditional probabilities, if any.
 \item
+The number of conditional probability for 0-runs was determined by dividing the number of 0-runs of length k by the total number of 0-runs. The conditional probabilities are shown in Listing~\ref{list:a5}.
+\lstinputlisting[caption=Conditional probability of 0-runs,label=list:a5]{../MATLAB/output/a5.txt}
+There are no discrepancies between the theoretical and experimental conditional probabilities, the conditional probabilities match what we expect from the theoretical values.
 
 % A6
+% Create a table for 1-runs, with 4 rows, and 24 columns. Follow the same instructions as in A5.
 \item
+We see the same results for 1-runs as we do for 0-runs, as explained in A5. The conditional probabilities are shown in Listing~\ref{list:a6}.
+\lstinputlisting[caption=Conditional probability of 1-runs,label=list:a6]{../MATLAB/output/a6.txt}
+There are no discrepancies between the theoretical and experimental conditional probabilities, the conditional probabilities match what we expect from the theoretical values.
 
 \end{enumerate}
 
