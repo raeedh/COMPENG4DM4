@@ -82,35 +82,41 @@ end
 
 %% A5, A6
 
-% https://www.mathworks.com/matlabcentral/answers/459701-counting-consecutive-occurences-of-1s-and-1s
-changeBits = [1, diff(BITS(1:end-1))] ~= 0;
-counts = histcounts(cumsum(changeBits), 1:sum(changeBits) + 1);
-bitSequences = [BITS(changeBits)',counts'];
+% Determine 0-runs and 1-runs and their lengths
+changeBits = [1, diff(BITS(1:end-1))] ~= 0; % Determine indices where value changes from 0 to 1 or vice versa
+% Get total lengths of runs by getting cumulative sum of changeBits and
+% using histogram bin counts function to get number of elements in each bin
+% (length of each run)
+counts = histcounts(cumsum(changeBits), 1:sum(changeBits) + 1); 
+bitSequences = [BITS(changeBits)',counts']; % Put into 2 colum matrix with 0 or 1 run and length (eg. 1 10 is 1-run of length 10)
 
+% initialize 4 row column for A5, A6
 zeroruns_table = zeros(4, 24); oneruns_table = zeros(4, 24);
 
-% first row of table
+% first row of table, set first row equal to k = 1, 2, 3...
 zeroruns_table(1, 1:24) = 1:24;
 oneruns_table(1, 1:24) = 1:24;
 
-% second row of table
+% second row of table, tally number of 0-runs or 1-runs of length k
 for i = 1:size(bitSequences, 1)
-    if (bitSequences(i, 2) <= 25) % Check in range of table bounds
+    if (bitSequences(i, 2) <= 25) % check if k < 25 as table only goes to k = 24
         % Increment the run count for the corresponding run length
-        if bitSequences(i, 1) == 0
+        if bitSequences(i, 1) == 0 % check if is 0 run
             oneruns_table(2, bitSequences(i, 2)) = oneruns_table(2, bitSequences(i, 2)) + 1;
-        else
+        else % if 1 run
             zeroruns_table(2, bitSequences(i, 2)) = zeroruns_table(2, bitSequences(i, 2)) + 1;
         end
     end
 end
 
 % third row of table
-% Find the total number of zeros and ones from the runs tables
+% Find the total number of zeros and ones from the runs tables by multiply
+% number runs of each k and multiplying by k, then taking sum
 totalZeros = sum(zeroruns_table(1,:) .* zeroruns_table(2,:));
 totalOnes = sum(oneruns_table(1,:) .* oneruns_table(2,:));
 for i = 1:24
-   % Calculate the actual probability of each run length occurring
+   % Calculate the actual probability of each run length occurring by
+   % dividing number of runs of length k by total observed runs
    oneruns_table(3, i) = oneruns_table(2, i) / sum(oneruns_table(2,:));
    zeroruns_table(3, i) = zeroruns_table(2, i) / sum(zeroruns_table(2,:));
 end
