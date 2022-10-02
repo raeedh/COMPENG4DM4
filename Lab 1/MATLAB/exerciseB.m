@@ -3,6 +3,7 @@ clear all;
 clc;
 
 %% B1
+
 % input image file here
 % max number of pixels is 174762, or 418x418 if image is square
 image_path = "images\dimorphos.png";
@@ -37,6 +38,7 @@ my_random_numbers; % Call the script to load the random-generated numbers
 RAND_matrix = RANDOM_DATA_OUT(1:numel(A)); % Load random data into array
 
 %% B3, B4
+
 % Initialize encrypted image array, and convert to uint8
 A_encrypted = zeros(size(A));
 A_encrypted = uint8(A_encrypted);
@@ -53,6 +55,7 @@ image_encrypted = imshow(A_encrypted);
 image_encrypted_export = gca;
 
 %% B5
+
 % Initialize encrypted image array, and convert to uint8
 A_decrypted = zeros(size(A_encrypted));
 A_decrypted = uint8(A_decrypted);
@@ -68,7 +71,7 @@ clf;
 image_decrypted = imshow(A_decrypted);
 image_decrypted_export = gca;
 
-% Export and save images to png files
+%% Export and save images to png files
 exportgraphics(image_original_export,'images/original_image.png');
 exportgraphics(image_encrypted_export,'images/encrpyted_image.png');
 exportgraphics(image_decrypted_export,'images/decrypted_image.png');
