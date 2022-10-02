@@ -28,7 +28,8 @@ end
 % Create original image figure
 figure('Name', 'Original Image');
 clf;
-image_original = image(A);
+image_original = imshow(A);
+image_original_export = gca;
 
 %% B2
 my_random_numbers; % Call the script to load the random-generated numbers
@@ -48,7 +49,8 @@ end
 % Create encrypted image figure
 figure('Name', 'Encrypted Image');
 clf;
-image_encrypted = image(A_encrypted);
+image_encrypted = imshow(A_encrypted);
+image_encrypted_export = gca;
 
 %% B5
 % Initialize encrypted image array, and convert to uint8
@@ -63,4 +65,10 @@ end
 % Create decrypted image figure
 figure('Name', 'Decrypted Image');
 clf;
-image(A_decrypted)
+image_decrypted = imshow(A_decrypted);
+image_decrypted_export = gca;
+
+% Export and save images to png files
+exportgraphics(image_original_export,'images/original_image.png');
+exportgraphics(image_encrypted_export,'images/encrpyted_image.png');
+exportgraphics(image_decrypted_export,'images/decrypted_image.png');
