@@ -18,8 +18,8 @@ ROT.L	R3,R3,#8	% ROTATE_LEFT(d, 8)
 
 ADD		R2,R3,R2	% c = c + d
 SW		(0)Rd,R3	% store d
+SW		(0)Rc,R2	% store c
 XOR		R1,R1,R2	% XOR(b,c)
 ROT.L	R1,R1,#7	% ROTATE_LEFT(b, 7)
 
-SW		(0)Rc,R2	% store c
 SW		(0)Rb,R1	% store b
