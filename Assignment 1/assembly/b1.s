@@ -13,7 +13,7 @@ SD	(0)R0,Ra	% store a in memory
 
 LD	Ra,(0)R0	% load a from memory
 LD	Rd,(48)R0	% load d from memory
-XOR	Rd,Rd,Rd	% XOR(d,a)
+XOR	Rd,Rd,Ra	% XOR(d,a)
 SD	(48)R0,Rd	% store d in memory
 
 LD	Rd,(48)R0	% load d from memory
