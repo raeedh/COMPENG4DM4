@@ -6,8 +6,8 @@
 
 LD	Ra,(0)R0	% load a
 LD	Rb,(16)R0	% load b
-LD	Rc,(32)R0 	% load c
 LD	Rd,(48)R0	% load d
+LD	Rc,(32)R0 	% load c
 
 ADD	Ra,Ra,Rb	% a = a + b
 XOR	Rd,Rd,Ra	% XOR(d,a)
@@ -19,13 +19,13 @@ ROT.L	Rb,Rb,#12	% ROTATE_LEFT(b, 12)
 
 ADD	Ra,Ra,Rb	% a = a + b
 XOR	Rd,Rd,Ra	% XOR(d,a)
-SD	(0)R0,Ra	% store a
 ROT.L	Rd,Rd,#8	% ROTATE_LEFT(d, 8)
 
 ADD	Rc,Rc,Rd	% c = c + d
-SD	(48)R0,Rd	% store d
 XOR	Rb,Rb,Rc	% XOR(b,c)
-SD	(32)R0,Rc	% store c
 ROT.L	Rb,Rb,#7	% ROTATE_LEFT(b, 7)
 
+SD	(0)R0,Ra	% store a
+SD	(48)R0,Rd	% store d
+SD	(32)R0,Rc	% store c
 SD	(16)R0,Rb	% store b
