@@ -1,1 +1,15 @@
 \section*{Exercise Part (B) - Generate RISC Code for The Chacha20 Stream Cipher}
+
+\begin{enumerate}[wide, label=(B\arabic*)]
+
+% (B1) Create an excel timing-diagram for the un-optimized RISC code, of the first 3 lines of the QUARTER-ROUND operation. Use the 7-stage pipeline in part B. You may assume that a register (say R0) contains the address of the first word of the block. (Your RISC code in parts B1 to B4 should show how all memory addresses are calculated, so use explicit memory addresses in your RISC instructions, ie LOAD R1,0(R0), where the memory address is 0+R0). • Highlight any assumptions that you make. Use a label, ie “ASSUMPTION #1” and explain it.(B1) Create an excel timing-diagram for the un-optimized RISC code, of the first 3 lines of the QUARTER-ROUND operation. Use the 7-stage pipeline in part B. You may assume that a register (say R0) contains the address of the first word of the block. (Your RISC code in parts B1 to B4 should show how all memory addresses are calculated, so use explicit memory addresses in your RISC instructions, ie LOAD R1,0(R0), where the memory address is 0+R0). • Highlight any assumptions that you make. Use a label, ie “ASSUMPTION #1” and explain it.
+\item The unoptimized RISC code for the first 3 lines of the QUARTER-ROUND operation is shown in Listing~\ref{list:b1}. The following assumptions are made for this RISC code:
+\begin{itemize}
+	\item ASSUMPTION 1: assume that register R0 contains the address of the first word of the block of the initial key-stream
+	\item ASSUMPTION 2: each word is 32 bits, so use LD and SD instead of LW and SD to load 32-bit words
+	\item ASSUMPTION 3: words in the initial key-stream are stored consecutively in memory, address of second word is address of first world + 4 (bytes)
+\end{itemize}
+\lstinputlisting[caption=Unoptimized RISC code for the first 3 lines of QUARTER-ROUND operation,label=list:b1,firstline=5]{../assembly/b1.s}
+
+
+\end{enumerate}

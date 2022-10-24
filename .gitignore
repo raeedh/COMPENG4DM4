@@ -8,3 +8,6 @@
 
 # MATLAB autosave
 *.asv
+
+# Excel Autosave
+~$*.xlsx

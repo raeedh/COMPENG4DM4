@@ -3,13 +3,11 @@
 \begin{enumerate}[wide, label=(A\arabic*)]
 
 % (A1) How many stalls (clock-cycles) occur, on LOAD instructions (when the instruction following a LOAD instruction uses the value being loaded) ? Use an excell timing diagram to illustrate your answer, and use an arrow (or asterisks *) to illustrate when data is FORWARDED. (Please see the class notes - the timing diagram has instructions along the y-axis, and clock-cycles along the x-axis. A sample excel file is posted on Avenue-to-Learn.) • Add a comment for every forwarding of data or signals that occurs. A comment might be ‘*forward R0 (EX* to *D) in cc 7’.
-\item 
-There is a 2 clock-cycle stall on LOAD instructions when the instruction following a LOAD instruction uses the value being loaded. The timing diagram can be seen in Figure~\ref{fig:A1}.
+\item  There is a 2 clock-cycle stall on LOAD instructions when the instruction following a LOAD instruction uses the value being loaded. The timing diagram can be seen in Figure~\ref{fig:A1}.
 
 % How many branch-delay-slots (clock-cycles) occur, following a BRANCH instruction?
 % Make the same assumptions as in the class notes: Consider an instruction BNEZ R0, loop. Assume that branches are resolved as soon as possible, in the ID stage, without “stretching the clock”. This leads to 2 cases to consider, as described in the class notes:
-\item
-The number of branch-delay-slots following a BRANCH instruction will be 2 clock cycles in both cases considered:
+\item The number of branch-delay-slots following a BRANCH instruction will be 2 clock cycles in both cases considered:
 \begin{enumerate}[wide, label=\arabic*.]
 % (1) If the value R0 being tested is available in a register at the start of the ID stage, then the “branch is resolved” in the ID stage - the ID stage will compare R0 with zero, and generate a “Take-Branch” signal which is sent back to the IF1 stage from the ID stage in clock-cycle 3. (See class notes in 4DM4 Lecture 10.)
 \item If the value R0 being tested is available in a register at the start of the ID stage, then the “branch is resolved” in the ID stage - the ID stage will compare R0 with zero, and generate a “Take-Branch” signal which is sent back to the IF1 stage from the ID stage in clock-cycle 3. In this case, 2 branch-delay-slots will occur, as seen in Figure~\ref{fig:A2.1}. The compiler can attempt to fill the "BRANCH+1" and "BRANCH+2" branch delay slots with useful instructions, otherwise fill with a NO-OP. 
