@@ -1,25 +1,31 @@
-LW	R0,(0)Ra	% load a
-LW	R1,(0)Rb	% load b
-LW	R2,(0)Rc 	% load c
-LW	R3,(0)Rd	% load d
+% ASSUMPTION 1: assume that register R0 contains the address of the first word of the block of the initial key-stream
+% ASSUMPTION 2: each word is 32 bits, so use LD and SD instead of LW and SD to load 32-bit words
+% ASSUMPTION 3: words in the initial key-stream are stored consecutively in memory, address of second word is address of first world + 4 (bytes)
 
-ADD	R0,R1,R0	% a += b
-XOR	R3,R0,R3	% XOR(d,a)
-ROT.L	R3,R3,#16	% ROTATE_LEFT(d, 16)
+#define Ra => R1; Rb => R2; ; Rc => R3; Rd => R4	% define Ra, Rb, Rc, Rd
 
-ADD	R2,R3,R2	% c = c + d
-XOR	R1,R1,R2	% XOR(b,c)
-ROT.L	R1,R1,#12	% ROTATE_LEFT(b, 12)
+LD	Ra,(0)R0	% load a
+LD	Rb,(16)R0	% load b
+LD	Rc,(32)R0 	% load c
+LD	Rd,(48)R0	% load d
 
-ADD	R0,R1,R0	% a = a + b
-XOR	R3,R0,R3	% XOR(d,a)
-SW	(0)Ra,R0	% store a
-ROT.L	R3,R3,#8	% ROTATE_LEFT(d, 8)
+ADD	Ra,Ra,Rb	% a = a + b
+XOR	Rd,Rd,Ra	% XOR(d,a)
+ROT.L	Rd,Rd,#16	% ROTATE_LEFT(d, 16)
 
-ADD	R2,R3,R2	% c = c + d
-SW	(0)Rd,R3	% store d
-SW	(0)Rc,R2	% store c
-XOR	R1,R1,R2	% XOR(b,c)
-ROT.L	R1,R1,#7	% ROTATE_LEFT(b, 7)
+ADD	Rc,Rc,Rd	% c = c + d
+XOR	Rb,Rb,Rc	% XOR(b,c)
+ROT.L	Rb,Rb,#12	% ROTATE_LEFT(b, 12)
 
-SW	(0)Rb,R1	% store b
+ADD	Ra,Ra,Rb	% a = a + b
+XOR	Rd,Rd,Ra	% XOR(d,a)
+SD	(0)R0,Ra	% store a
+ROT.L	Rd,Rd,#8	% ROTATE_LEFT(d, 8)
+
+ADD	Rc,Rc,Rd	% c = c + d
+SD	(48)R0,Rd	% store d
+XOR	Rb,Rb,Rc	% XOR(b,c)
+SD	(32)R0,Rc	% store c
+ROT.L	Rb,Rb,#7	% ROTATE_LEFT(b, 7)
+
+SD	(16)R0,Rb	% store b
