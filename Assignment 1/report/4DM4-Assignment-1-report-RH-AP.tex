@@ -1,0 +1,49 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\graphicspath{{./figures/}}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{amsmath}
+%\usepackage{siunitx}
+%\usepackage{pgfplots}
+%\usepackage{pgfplotstable}
+%\pgfplotsset{compat = newest}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{listings}
+%\usepackage[framed, numbered]{matlab-prettifier}
+\lstset{language=Matlab, basicstyle=\small, frame=single, breaklines=true}
+
+\titleformat*{\section}{\large\bfseries}
+%\allowdisplaybreaks
+
+% remove vertical spacing above top figure
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+%
+
+\title{COMPENG 4DM4 Assignment 1 Report}
+\author{
+    Aaron Pinto \\
+    pintoa9 \\
+    %L02
+    \and
+    Raeed Hassan \\
+    hassam41 \\
+    %L02
+}
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+\input{exA.tex}
+
+
+\input{exB.tex}
+
+\end{document}
