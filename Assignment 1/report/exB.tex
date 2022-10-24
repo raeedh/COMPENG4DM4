@@ -15,9 +15,9 @@
 The timing diagram can be seen in Figure~\ref{fig:B1}. % need to figure out delay for stall.
 
 \begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{b1.png}
-    \caption{\label{fig:B1}Timing Diagram for B1}
+	\centering
+	\includegraphics[width=\textwidth]{b1.png}
+	\caption{\label{fig:B1}Timing Diagram for B1}
 \end{figure}
 
 % Write the un-optimized RISC code, for one QUARTER-ROUND operation (with 12 lines of C-code as shown in Fig. 2). (Use your insights gathered from B1.)
@@ -53,10 +53,10 @@ ADD Ra,Ra,Rb	&2	& a = a + b           \\ \hline
 SD (0)R0,Ra	&2	& store a in memory   \\ \hline
 LD Ra,(0)R0	&2+1=3	& load a from memory  \\ \hline
 LD Rd,(48)R0	&2+1=3	& load d from memory  \\ \hline
-XOR Rd,Rd,Rd	&1+2=3	& XOR(d,a)            \\ \hline
+XOR Rd,Rd,Ra	&1+2=3	& XOR(d,a)            \\ \hline
 SD (48)R0,Rd	&1+2=3	& store d in memory   \\ \hline
-LD Rd,(48)R0	&1+2+1=4& load d from memory  \\ \hline
-ROT.L Rd,Rd,\#16&2+1+2=5& ROTATE\_LEFT(d, 16) \\ \hline
+LD Rd,(48)R0	&1+2+1=4	& load d from memory  \\ \hline
+ROT.L Rd,Rd,\#16	&2+1+2=5	& ROTATE\_LEFT(d, 16) \\ \hline
 SD (48)R0,Rd	&1+2=3	& store d in memory   \\ \hline
 LD Rc,(32)R0	&1+2=3	& load c from memory  \\ \hline
 LD Rd,(48)R0	&1+2=3	& load d from memory  \\ \hline
@@ -66,8 +66,8 @@ LD Rb,(16)R0	&2+1=3	& load b from memory  \\ \hline
 LD Rc,(32)R0	&2+1=3	& load c from memory  \\ \hline
 XOR Rb,Rb,Rc	&1+2=3	& XOR(b,c)            \\ \hline
 SD (16)R0,Rb	&1+2=3	& store b in memory   \\ \hline
-LD Rb,(16)R0	&1+2+1=4& load b from memory  \\ \hline
-ROT.L Rb,Rb,\#12&2+1+2=5& ROTATE\_LEFT(b, 12) \\ \hline
+LD Rb,(16)R0	&1+2+1=4	& load b from memory  \\ \hline
+ROT.L Rb,Rb,\#12	&2+1+2=5	& ROTATE\_LEFT(b, 12) \\ \hline
 SD (16)R0,Rb	&1+2=3	& store b in memory   \\ \hline
 LD Ra,(0)R0	&1+2=3	& load a from memory  \\ \hline
 LD Rb,(16)R0	&1+2=3	& load b from memory  \\ \hline
@@ -75,10 +75,10 @@ ADD Ra,Ra,Rb	&2	& a = a + b           \\ \hline
 SD (0)R0,Ra	&2	& store a in memory   \\ \hline
 LD Ra,(0)R0	&2+1=3	& load a from memory  \\ \hline
 LD Rd,(48)R0	&2+1=3	& load d from memory  \\ \hline
-XOR Rd,Rd,Rd	&1+2=3	& XOR(d,a)            \\ \hline
+XOR Rd,Rd,Ra	&1+2=3	& XOR(d,a)            \\ \hline
 SD (48)R0,Rd	&1+2=3	& store d in memory   \\ \hline
-LD Rd,(48)R0	&1+2+1=4& load d from memory  \\ \hline
-ROT.L Rd,Rd,\#8	&2+1+2=5& ROTATE\_LEFT(d, 8)  \\ \hline
+LD Rd,(48)R0	&1+2+1=4	& load d from memory  \\ \hline
+ROT.L Rd,Rd,\#8	&2+1+2=5	& ROTATE\_LEFT(d, 8)  \\ \hline
 SD (48)R0,Rd	&1+2=3	& store d in memory   \\ \hline
 LD Rc,(32)R0	&1+2=3	& load c from memory  \\ \hline
 LD Rd,(48)R0	&1+2=3	& load d from memory  \\ \hline
@@ -94,7 +94,13 @@ SD (16)R0,Rb	&1+2=3	& store b in memory   \\ \hline
 \end{longtable}
 
 % (B3) Calculate the number of clock-cycles for the un-optimized QUARTER-ROUND in B2 to execute. (You can ignore the time to flush the pipeline.) Explain your answer clearly.
-\item hi
+\item The unoptimized QUARTER-ROUND in B2 will take 82 clock-cycles to execute. We extended the the timing diagram for B1 (Figure~\ref{fig:B1}) till after the next set of LOAD instructions, and discovered that the timing diagram repeats starting on the first arithmetic operation of the next column (as seen in Figure~\ref{fig:B2}). This allowed us to extend the timing diagram to cover the entire odd ROUND operation, and we determined from the timing diagram that this operation would take 82 clock-cycles to execute.
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[width=\textwidth]{b2.png}
+	\caption{\label{fig:B2}Partial Timing Diagram for B2}
+\end{figure}
 
 % (B4) Optimize the QUARTER-ROUND code in B2, to minimize stalls. (The compiler will re- arrange instructions, to minimize stalls. The compiler will minimize the number of LOADs and STORES, to minimize stalls.) Create a compressed timing-diagram, to show how the QUARTER-ROUND will execute once it has been optimized. The timing-diagram will illustrate how many stalls occur. Explain how many clock cycles it takes, to execute the optimized QUARTER-ROUND operation.
 % In the compressed timing diagram, use comments to indicate all forwarding of data and signals. A comment might be ‘* forward R0 (EX to D) in cc 7’. (If you have already made an uncompressed timing diagram, you can use that instead.)
