@@ -56,7 +56,7 @@ LD Rd,(48)R0	&	& load d from memory  \\ \hline
 XOR Rd,Rd,Rd	&	& XOR(d,a)            \\ \hline
 SD (48)R0,Rd	&	& store d in memory   \\ \hline
 LD Rd,(48)R0	&	& load d from memory  \\ \hline
-ROT.L Rd,Rd,\#	&	& ROTATE\_LEFT(d, 16) \\ \hline
+ROT.L Rd,Rd,\#16	&	& ROTATE\_LEFT(d, 16) \\ \hline
 SD (48)R0,Rd	&	& store d in memory   \\ \hline
 LW Rc,(32)R0	&	& load c from memory  \\ \hline
 LW Rd,(48)R0	&	& load d from memory  \\ \hline
@@ -67,7 +67,7 @@ LW Rc,(32)R0	&	& load c from memory  \\ \hline
 XOR Rb,Rb,Rc	&	& XOR(b,c)            \\ \hline
 SD (16)R0,Rb	&	& store b in memory   \\ \hline
 LW Rb,(16)R0	&	& load b from memory  \\ \hline
-ROT.L Rb,Rb,\#	&	& ROTATE\_LEFT(b, 12) \\ \hline
+ROT.L Rb,Rb,\#12	&	& ROTATE\_LEFT(b, 12) \\ \hline
 SD (16)R0,Rb	&	& store b in memory   \\ \hline
 LD Ra,(0)R0	&	& load a from memory  \\ \hline
 LD Rb,(16)R0	&	& load b from memory  \\ \hline
