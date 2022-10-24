@@ -34,12 +34,10 @@ SD	(16)R0,Rb	% store b
 
 % COLUMN 2 (QR(x[1], x[5], x[9], x[13]))
 
-ADD.I	R0,#4		% increment R0 by 32-bit word to start at address of next word of block (move to next column)
-
-LD	Ra,(0)R0	% load a
-LD	Rb,(16)R0	% load b
-LD	Rc,(32)R0 	% load c
-LD	Rd,(48)R0	% load d
+LD	Ra,(4)R0	% load a
+LD	Rb,(20)R0	% load b
+LD	Rc,(36)R0 	% load c
+LD	Rd,(52)R0	% load d
 
 ADD	Ra,Ra,Rb	% a = a + b
 XOR	Rd,Rd,Ra	% XOR(d,a)
@@ -64,12 +62,10 @@ SD	(16)R0,Rb	% store b
 
 % COLUMN 3 (QR(x[2], x[6], x[10], x[14]))
 
-ADD.I	R0,#4		% increment R0 by 32-bit word to start at address of next word of block (move to next column)
-
-LD	Ra,(0)R0	% load a
-LD	Rb,(16)R0	% load b
-LD	Rc,(32)R0 	% load c
-LD	Rd,(48)R0	% load d
+LD	Ra,(8)R0	% load a
+LD	Rb,(24)R0	% load b
+LD	Rc,(40)R0 	% load c
+LD	Rd,(56)R0	% load d
 
 ADD	Ra,Ra,Rb	% a = a + b
 XOR	Rd,Rd,Ra	% XOR(d,a)
@@ -94,12 +90,10 @@ SD	(16)R0,Rb	% store b
 
 % COLUMN 4 (QR(x[3], x[7], x[11], x[15]))
 
-ADD.I	R0,#4		% increment R0 by 32-bit word to start at address of next word of block (move to next column)
-
-LD	Ra,(0)R0	% load a
-LD	Rb,(16)R0	% load b
-LD	Rc,(32)R0 	% load c
-LD	Rd,(48)R0	% load d
+LD	Ra,(12)R0	% load a
+LD	Rb,(28)R0	% load b
+LD	Rc,(44)R0 	% load c
+LD	Rd,(60)R0	% load d
 
 ADD	Ra,Ra,Rb	% a = a + b
 XOR	Rd,Rd,Ra	% XOR(d,a)
