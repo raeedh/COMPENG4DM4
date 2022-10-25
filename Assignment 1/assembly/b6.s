@@ -4,26 +4,24 @@
 % ASSUMPTION 4: assume dual-ported memory that allows simultaneous read+read, read+write, write+write
 
 #define Ra => R1; Rb => R2; ; Rc => R3; Rd => R4	% define Ra, Rb, Rc, Rd
-#define Rlo => R5; Rli => R6				% define loop counters for outer and inner loops
+#define Rlo => R5; Rli => R6	% define loop counters for outer and inner loops
 
-% initialize loop counters
-LW.I	Rlo,#1024	% initialize loop counter for outer loop to 1024 for 1024 blocks
-LW.I	Rli,#10		% initialize loop counter for outer loop to 10 for 10 iterations of DOUBLE-ROUND
+LW.I	Rlo,#1023	% initialize loop counter for outer loop for 1024 blocks
 
 outer_loop: % OUTER LOOP
-	SUB.I	Rlo,#1	% decrement loop counter for outer loop by 1
+	LW.I	Rli,#9	% initialize loop counter for inner loop for 10 iterations of DOUBLE-ROUND
 
 inner_loop: % INNER LOOP
-	SUB.I	Rli,#1	% decrement loop counter for inner loop by 1
-
 	% odd round
-	(unmodified B5 code)
+	Insert RISC code from B5 for one round
 
 	% even round
-	(B5 code with modified load addressing)	% explained in report
+	Insert RISC code from B5 for one round with diagonal addressing and excluding last store	% changed addressing
 
 	BNEZ	Rli,inner_loop	% repeat inner_loop if inner loop counter not 0
-	% need to figure out if we need NO-OPs here or not?
+	SD	(x)R0,Rb	% last store from 
+	SUB.I	Rli,#1	% decrement loop counter for inner loop by 1
 
 	BNEZ	Rlo, outer_loop	% repeat outer loop if outer loop counter not 0
-	ADD.I	R0,#64		% increment address to next block (4 * 16 bytes)
+	ADD.I	R0,#64	% increment address to next block (4 * 16 bytes)
+	SUB.I	Rlo,#1	% decrement loop counter for outer loop by 1

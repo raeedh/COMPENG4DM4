@@ -173,8 +173,60 @@ From the table, we can see that it would simply take 4 $\times$ the number of cl
 % • Add a comment for every line of code. (Clear and concise comments take thought, and are worth marks.)
 % Clearly explain how many clock cycles it takes, to process 1,024 blocks of data. Explain how many clock cycles it takes, to execute the optimized outer and inner loops for Chacha20. If any instructions cause stalls, identify these instructions, and explain how many stalls per instruction occur. (You can ignore the time to flush the pipeline.)
 % • If you make any assumptions, highlight those assumptions. Use a label ie “ASSUMPTION #1” and explain it.
-\item 
+\item The optimized RISC code and the outer and inner loop of Chacha20 can be seen in Table~\ref{tab:B6}. For the DOUBLE-ROUND operation in the inner loop, the first ROUND operation uses the unmodified code from B5, while the second ROUND operation updates the addresses for the diagonals. We also exclude the last STORE instruction from our diagonal ROUND operation, so we can place it after the BNEZ instruction to use one of our branch-delay-slots (there are 2 branch-delay-slots after each branch as shown in A2). We also fill our remaining branch-delay-slots with useful instructions which allows to have a Chacha20 operation with no stalling. The following assumptions are made for this RISC code:
+\begin{itemize}
+	\item ASSUMPTION 1: assume that register R0 contains the address of the first word of the block of the initial key-stream
+	\item ASSUMPTION 2: each word is 32 bits, so use LD and SD instead of LW and SD to load 32-bit words
+	\item ASSUMPTION 3: words in the initial key-stream are stored consecutively in memory, address of second word is address of first world + 4 (bytes)
+	\item ASSUMPTION 4: assume dual-ported memory that allows simultaneous read+read, read+write, write+write
+\end{itemize}
+The following macros are defined:
+\lstinputlisting[caption=B6 Macros,label=list:b6,firstline=6,lastline=7]{../assembly/b6.s}
 
+\begin{table}[htp]
+\centering
+\caption{Outer and Inner Loops of Chacha20}\label{tab:B6}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|l|l|l|}
+	\hline
+	Code &
+		Number of stall cycles &
+		Comment \\ \hline
+	LW.I    Rlo,\#1023 &
+		0 &
+		initialize loop counter for outer loop for 1024 blocks \\ \hline
+	outer\_loop:    LW.I    Rli,\#9 &
+		0 &
+		\begin{tabular}[c]{@{}l@{}}start of outer loop\\ initialize loop counter for inner loop for 10 iterations\\ of DOUBLE-ROUND\end{tabular} \\ \hline
+	\begin{tabular}[c]{@{}l@{}}inner\_loop:\\ Insert RISC code from B5 for one round\end{tabular} &
+		0 &
+		\begin{tabular}[c]{@{}l@{}}start of inner loop\\ odd round\\ unmodified code from B5\end{tabular} \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Insert RISC code from B5 for one round\\ with modified diagonal addressing\\ excluding SD instruction\end{tabular} &
+		0 &
+		\begin{tabular}[c]{@{}l@{}}even round\\ update B5 code to have addressing for diagonals\\ (QR((0)R0,(20)R0,(40)R0,(60)R0), ...)\\ exclude last store instruction to place in\\ branch-delay-slot\end{tabular} \\ \hline
+	BNEZ    Rli,inner\_loop &
+		0 &
+		repeat inner\_loop if inner loop counter not 0 \\ \hline
+	SD    (x)R0,Rb &
+		0 &
+		\begin{tabular}[c]{@{}l@{}}use branch-delay-slot\\ last store instruction from even ROUND\end{tabular} \\ \hline
+	SUB.I    Rli,\#1 &
+		0 &
+		\begin{tabular}[c]{@{}l@{}}use branch-delay-slot\\ decrement inner loop counter by 1\end{tabular} \\ \hline
+	BNEZ   Rlo,outer\_loop &
+		0 &
+		repeat outer loop if outer loop counter not 0 \\ \hline
+	ADD.I    R0,\#64 &
+		0 &
+		\begin{tabular}[c]{@{}l@{}}use branch-delay-slot\\ increment address to next block (4 * 16 bytes)\end{tabular} \\ \hline
+	SUB.I    Rlo,\#1 &
+		0 &
+		\begin{tabular}[c]{@{}l@{}}use branch-delay-slot\\ decrement outer loop counter by 1\end{tabular} \\ \hline
+\end{tabular}
+}
+\end{table}
+
+% Assume a 2.5 GHz clock rate. Assume a RISC machine that fetches 1 instruction at a time. How long does it take (in nanoseconds, microseconds, or milliseconds) to process 1,024 blocks, in part B5 ? Explain your answer clearly; a numerical answer alone may not be sufficient.
 \item 
 
 
