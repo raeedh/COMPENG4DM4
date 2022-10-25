@@ -227,7 +227,8 @@ The following macros are defined:
 \end{table}
 
 % Assume a 2.5 GHz clock rate. Assume a RISC machine that fetches 1 instruction at a time. How long does it take (in nanoseconds, microseconds, or milliseconds) to process 1,024 blocks, in part B5 ? Explain your answer clearly; a numerical answer alone may not be sufficient.
-\item 
+\item For the optimized RISC code for a QUARTER-ROUND operation in B4, we had 20 instructions. Therefore, each ROUND operation contains 80 instructions. The inner loop in B6 contains 162 instructions (80 from first ROUND, 79 from second ROUND, 1 from branch, 2 from branch-delay-slots), and this iterates 10 times in every iteration of the outer loop for 1620 instructions. Each outer loop iteration contains 1624 instructions (1 from inner loop counter initialization, 1620 from inner loop, 1 from branch, 2 from branch-delay-slots), iterated 1024 times for a total of 1662976 instructions. Once we add the instruction for the outer loop counter initialization, and the 6 extra instructions for the last Chacha20 instruction to finish the WB stage of the pipeline, we are left with 1662983 instructions.
 
+With a 2.5 GHz clock rate, we can process 2500000000 instructions per second. This means we can process 1662983 instructions in 0.665193 milliseconds, or 665.1932 microseconds.
 
 \end{enumerate}
