@@ -1,0 +1,66 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\graphicspath{{./figures/}}
+\usepackage{hyperref}
+\hypersetup{colorlinks = true}
+\usepackage{parskip}
+\usepackage{amsmath}
+%\usepackage{siunitx}
+%\usepackage{pgfplots}
+%\usepackage{pgfplotstable}
+%\pgfplotsset{compat = newest}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{listings}
+%\usepackage[framed, numbered]{matlab-prettifier}
+\lstset{basicstyle=\small, frame=single, breaklines=true}
+\usepackage{longtable}
+
+\titleformat*{\section}{\large\bfseries}
+%\allowdisplaybreaks
+
+% remove vertical spacing above top figure
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+%
+
+\title{COMPENG 4DM4 Assignment 1 Report}
+\author{
+    Aaron Pinto \\
+    pintoa9 \\
+    %L02
+    \and
+    Raeed Hassan \\
+    hassam41 \\
+    %L02
+}
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+\section*{Assumptions}
+In addition to the assumptions stated in the assignment, the following assumptions are made for all parts of the assignment:
+\begin{itemize}
+    \item FP-ADD unit 3-stage pipeline labeled as A1, A2, A3
+    \item FP-MULT unit 6-stage pipeline labeled as FM1, FM2, FM3, FM4, FM5, FM6
+    \item Full forwarding of data from WB stage to any stage
+	\item assume dual-ported memory that allows simultaneous read and/or write on two ports
+	\item we can perform 2 write-backs per clock cycle
+\end{itemize}
+
+\input{sections/a.tex}
+
+\input{sections/b.tex}
+
+\input{sections/c.tex}
+
+\input{sections/d.tex}
+
+\input{sections/e.tex}
+
+\end{document}

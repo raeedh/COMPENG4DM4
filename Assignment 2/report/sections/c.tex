@@ -1,0 +1,243 @@
+\section*{Part (c): DAXPY Loop, With Unrolling, with no Scheduling}
+The compressed timing diagram is shown in Table~\ref{tab:c}. The compressed timing diagram is also included in the submission as 4DM4-Assignment-\#2c-Compressed-Timing-Table-single-issue.xlsx. The performance, or MFLOP rating, of the implementation with a 3 GHz clock is (3 GHz)*(8 FLOP/61 cc) = 393.4 MFLOP/s.
+
+\begin{table}[htp]
+\centering
+\caption{Compressed Timing Diagram for DAXPY Loop (Unrolling, No Scheduling)}\label{tab:c}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|l|c|c|c|c|c|l|}
+	\hline
+	Instruction   Slot \#1 &
+	  IF (F1,F2) &
+	  ID &
+	  EX (Int, FP) &
+	  MEM (M1,M2) &
+	  WB &
+	  \multicolumn{1}{c|}{Comment/Hazard} \\ \hline
+	loop:  L.D            F2, 0(R1) &
+	  1,2 &
+	  3 &
+	  4 &
+	  5,6* &
+	  7 &
+	  forward F2 (from M2* to *FM1) in cc6 \\ \hline
+	MULT.D     F4, F2, F0 &
+	  2,3 &
+	  4 &
+	  *7,8,9,10,11,12** &
+	   &
+	  13 &
+	  \begin{tabular}[c]{@{}l@{}}forward   F4 (FM6** to **A1) in cc12\\ stall on FM1 waiting for F2\end{tabular} \\ \hline
+	L.D            F6, 0(R2) &
+	  3,4 &
+	  7 &
+	  8 &
+	  9,10 &
+	  11 &
+	   \\ \hline
+	ADD.D       F6, F4, F6 &
+	  5,7 &
+	  11 &
+	  **13,14,15* &
+	   &
+	  16 &
+	  \begin{tabular}[c]{@{}l@{}}forward   F6 (A3* to *M1) in cc15\\ stall on ID waiting for F6\\ stall on A1 waiting for F4\end{tabular} \\ \hline
+	S.D            0(R2), F6 &
+	  7,11 &
+	  13 &
+	  14 &
+	  *16,17 &
+	  18 &
+	  stall on M1 waiting   for F6 \\ \hline
+	DADDUI     R1, R1, \#8 &
+	  11,13 &
+	  14 &
+	  16 &
+	   &
+	  17 &
+	   \\ \hline
+	DADDUI     R2, R2, \#8 &
+	  13,14 &
+	  16 &
+	  17 &
+	   &
+	  18 &
+	   \\ \hline
+	L.D            F2, 0(R1) &
+	  14,16 &
+	  17 &
+	  18 &
+	  19,20* &
+	  21 &
+	  forward F2 (from M2*   to *FM1) in cc20 \\ \hline
+	MULT.D     F4, F2, F0 &
+	  16,17 &
+	  18 &
+	  *21,22,23,24,25,26** &
+	   &
+	  27 &
+	  \begin{tabular}[c]{@{}l@{}}forward   F4 (FM6** to **A1) in cc26\\      stall on FM1 waiting for F2\end{tabular} \\ \hline
+	L.D            F6, 0(R2) &
+	  17,18 &
+	  21 &
+	  22 &
+	  23,24 &
+	  25 &
+	   \\ \hline
+	ADD.D       F6, F4, F6 &
+	  18,21 &
+	  25 &
+	  **27,28,29* &
+	   &
+	  30 &
+	  \begin{tabular}[c]{@{}l@{}}forward   F6 (A3* to *M1) in cc29\\ stall on ID waiting for F6\\ stall on A1 waiting for F4\end{tabular} \\ \hline
+	S.D            0(R2), F6 &
+	  21,25 &
+	  27 &
+	  28 &
+	  *30,31 &
+	  32 &
+	  stall on M1 waiting   for F6 \\ \hline
+	DADDUI     R1, R1, \#8 &
+	  25,27 &
+	  28 &
+	  30 &
+	   &
+	  31 &
+	   \\ \hline
+	DADDUI     R2, R2, \#8 &
+	  27,28 &
+	  30 &
+	  31 &
+	   &
+	  32 &
+	   \\ \hline
+	L.D            F2, 0(R1) &
+	  28,30 &
+	  31 &
+	  32 &
+	  33,34* &
+	  35 &
+	  forward F2 (from M2*   to *FM1) in cc34 \\ \hline
+	MULT.D     F4, F2, F0 &
+	  30,31 &
+	  32 &
+	  *35,36,37,38,39,40** &
+	   &
+	  41 &
+	  \begin{tabular}[c]{@{}l@{}}forward   F4 (FM6** to **A1) in cc40\\ stall on FM1 waiting for F2\end{tabular} \\ \hline
+	L.D            F6, 0(R2) &
+	  31,32 &
+	  35 &
+	  36 &
+	  37,38 &
+	  39 &
+	   \\ \hline
+	ADD.D       F6, F4, F6 &
+	  32,35 &
+	  39 &
+	  **41,42,43* &
+	   &
+	  44 &
+	  \begin{tabular}[c]{@{}l@{}}forward   F6 (A3* to *M1) in cc43\\ stall on ID waiting for F6\\ stall on A1 waiting for F4\end{tabular} \\ \hline
+	S.D            0(R2), F6 &
+	  35,39 &
+	  41 &
+	  42 &
+	  *44,45 &
+	  46 &
+	  stall on M1 waiting   for F6 \\ \hline
+	DADDUI     R1, R1, \#8 &
+	  39,41 &
+	  42 &
+	  44 &
+	   &
+	  45 &
+	   \\ \hline
+	DADDUI     R2, R2, \#8 &
+	  41,42 &
+	  44 &
+	  45 &
+	   &
+	  46 &
+	   \\ \hline
+	L.D            F2, 0(R1) &
+	  42,44 &
+	  45 &
+	  46 &
+	  47,48* &
+	  49 &
+	  forward F2 (from M2*   to *FM1) in cc48 \\ \hline
+	MULT.D     F4, F2, F0 &
+	  44,45 &
+	  46 &
+	  *49,50,51,52,53,54** &
+	   &
+	  55 &
+	  \begin{tabular}[c]{@{}l@{}}forward   F4 (FM6** to **A1) in cc54\\ stall on FM1 waiting for F2\end{tabular} \\ \hline
+	L.D            F6, 0(R2) &
+	  45,46 &
+	  49 &
+	  50 &
+	  51,52 &
+	  53 &
+	   \\ \hline
+	ADD.D       F6, F4, F6 &
+	  46,49 &
+	  53 &
+	  **55,56,57* &
+	   &
+	  58 &
+	  \begin{tabular}[c]{@{}l@{}}forward   F6 (A3* to *M1) in cc57\\ stall on ID waiting for F6\\ stall on A1 waiting for F4\end{tabular} \\ \hline
+	S.D            0(R2), F6 &
+	  49,53 &
+	  55 &
+	  56 &
+	  *58,59 &
+	  60 &
+	  stall on M1 waiting   for F6 \\ \hline
+	DADDUI     R1, R1, \#8 &
+	  53,55 &
+	  56 &
+	  58 &
+	   &
+	  59 &
+	   \\ \hline
+	DADDUI     R2, R2, \#8 &
+	  55,56 &
+	  58 &
+	  59 &
+	   &
+	  60 &
+	   \\ \hline
+	DSGTUI     R3, R1, done &
+	  56,58 &
+	  59 &
+	  60* &
+	   &
+	  61 &
+	  forward R3 (EX* to   *ID) in cc60 \\ \hline
+	BEQZ         R3, loop &
+	  58,59 &
+	  *61 &
+	   &
+	   &
+	   &
+	  stall on ID waiting   for R3 \\ \hline
+	NO-OP &
+	  59,61 &
+	   &
+	   &
+	   &
+	   &
+	  branch-delay slot \\ \hline
+	NO-OP &
+	  61,62 &
+	   &
+	   &
+	   &
+	   &
+	  branch-delay slot \\ \hline
+\end{tabular}
+}
+\end{table}

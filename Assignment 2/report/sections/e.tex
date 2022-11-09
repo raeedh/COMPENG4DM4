@@ -1,0 +1,50 @@
+\section*{Part (e): DAXPY Loop, With Unrolling and Scheduling. On Dual-Issue Machine}
+
+The compressed timing diagram is shown in Table~\ref{tab:e}. The compressed timing diagram is also included in the submission as 4DM4-Assignment-\#2e-Compressed-Timing-Table-dual-issue.xlsx. The performance, or MFLOP rating, of the implementation with a 3 GHz clock is (3 GHz)*(8 FLOP/16 cc) = 1500 MFLOP/s.
+
+\begin{table}[b]
+\centering
+\caption{Compressed Timing Diagram for DAXPY Loop (Unrolling, Scheduling, Dual Issue)}\label{tab:e}
+\resizebox{0.95\textwidth}{!}{
+\begin{tabular}{|l|l|c|c|c|c|c|c|c|c|l|}
+	\hline
+	\multicolumn{1}{|c|}{Instruction   Slot \#1} &
+	  \multicolumn{1}{c|}{Instruction   Slot \#2} &
+	  IF &
+	  ID &
+	  EX1 &
+	  MEM1 &
+	  WB1 &
+	  EX2 &
+	  MEM2 &
+	  WB2 &
+	  \multicolumn{1}{c|}{Comment/Hazard} \\ \hline
+	loop: L.D            F1, 0(R1) & NO-OP                     & 1,2   & 3  & 4         & 5,6*   & 7  & -        & - & -   & forward F1 (M2* to *FM1) in cc6       \\ \hline
+	L.D            F4, 8(R1)       & NO-OP                     & 2,3   & 4  & 5         & 6,7*   & 8  & -        & - & -   & forward F4 (M2* to   *FM1) in cc7     \\ \hline
+	L.D            F7, 16(R1)      & NO-OP                     & 3,4   & 5  & 6         & 7,8*   & 9  & -        & - & -   & forward F7 (M2* to   *FM1) in cc8     \\ \hline
+	L.D            F10, 24(R1) &
+	  MULT.D     F2, F1, F0 &
+	  4,5 &
+	  6 &
+	  7 &
+	  8,9* &
+	  10 &
+	  *7-12** &
+	   &
+	  13 &
+	  \begin{tabular}[c]{@{}l@{}}forward   F10 (M2* to *FM1) in cc9\\ forward F2 (FM6** to **A1) in cc12\end{tabular} \\ \hline
+	L.D            F3, 0(R2)       & MULT.D     F5, F4, F0     & 5,6   & 7  & 8         & 9,10   & 11 & *8-13**  &   & 14  & forward F5 (FM6** to   **A1) in cc13  \\ \hline
+	L.D            F6, 8(R2)       & MULT.D     F8, F7, F0     & 6,7   & 8  & 9         & 10,11  & 12 & *9-14**  &   & 15  & forward F8 (FM6** to   **A1) in cc14  \\ \hline
+	L.D            F9, 16(R2)      & MULT.D     F11, F10, F0   & 7,8   & 9  & 10        & 11,12  & 13 & *10-15** &   & 16  & forward F11 (FM6** to   **A1) in cc15 \\ \hline
+	L.D            F12, 24(R2)     & DADDUI     R1, R1, \#32   & 8,9   & 10 & 11        & 12,13  & 14 & 11*      &   & 11  & forward R1 (EX* to   *EX) in cc11     \\ \hline
+	DADDUI     R2, R2, \#32        & DSGTUI     R3, R1, done   & 9,10  & 11 & 12        &        & 13 & *12      &   & 12  &                                       \\ \hline
+	NO-OP                          & ADD.D       F3, F2, F3    & 10,11 & 12 & -         & -      & -  & **13-15* &   & 16  & forward F3 (A3* to   *M1) in cc15     \\ \hline
+	NO-OP                          & ADD.D       F6, F5, F6    & 11,12 & 13 & -         & -      & -  & **14-16* &   & 17  & forward F6 (A3* to   *M1) in cc16     \\ \hline
+	S.D            -32(R2), F3     & ADD.D       F9, F8, F9    & 12,13 & 14 & 15        & *16,17 & 18 & **15-17  &   & 18* & forward F9 (WB* to   *M1) in cc18     \\ \hline
+	S.D            -24(R2), F6     & ADD.D       F12, F11, F12 & 13,14 & 15 & 16        & *17,18 & 19 & **16-18  &   & 19* & forward F12 (WB* to   *M1) in cc19    \\ \hline
+	BEQZ         R3, loop          & NO-OP                     & 14,15 & 16 & \textbf{} &        &    & -        & - & -   &                                       \\ \hline
+	S.D            -16(R2), F9     & NO-OP                     & 15,16 & 17 & 18        & *19,20 & 21 & -        & - & -   &                                       \\ \hline
+	S.D            -8(R2), F12     & NO-OP                     & 16,17 & 18 & 19        & *20,21 & 22 & -        & - & -   &                                       \\ \hline
+\end{tabular}
+}
+\end{table}
